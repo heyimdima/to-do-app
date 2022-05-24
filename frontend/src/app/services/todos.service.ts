@@ -16,17 +16,14 @@ export class TodosService {
 
   // 
   public toggleDone(id: number):void {
-    this.todos.map((v, i) => {
-      if (i == id) v.completed = !v.completed;
+    this.todos.map((todo) => {
+      if (todo.id == id) todo.completed = !todo.completed;
 
-      return v;
+      return todo;
     }
   )}
 
   public deleteTodo(id: number): void {
-    // this.todos.forEach( (todo, index) => {
-    //   if(todo.id === id) this.todos.splice(index, 1);
-    // })
     this.todos = this.todos.filter((todo) => todo.id !== id);
   }
 
