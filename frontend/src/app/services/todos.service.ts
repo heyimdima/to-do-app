@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
+import { environment as env } from 'src/environments/environment';
+
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Todo } from '../models/todo';
+import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { switchMap } from 'rxjs';
+
+const options = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+}
 
 
 @Injectable({
@@ -8,39 +18,50 @@ import { Todo } from '../models/todo';
 })
 export class TodosService {
 
-  private todos: Todo[] = [];
+  private todos$$: BehaviorSubject<Todo[]> = new BehaviorSubject<Todo[]>([])
+  public todos$: Observable<Todo[]> = this.todos$$.asObservable();
 
-  private lastId: number = 0;
+  public lastId: number = 0;
 
-  constructor() { }
+
+  constructor(public http: HttpClient) { }
 
   // 
   public toggleDone(id: number):void {
-    this.todos.map((todo) => {
-      if (todo.id == id) todo.completed = !todo.completed;
+    const url = `${env.url}/todo/${id}`
 
-      return todo;
-    }
-  )}
+    this.http.put<number>(url, id, options).subscribe();
+    this.getTodos();
 
-  public deleteTodo(id: number): void {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
+
+  }
+
+  public deleteTodo(id: number) : void {
+    // this.todos = this.todos.filter((todo) => todo.id !== id);
+    const url = `${env.url}/todo/${id}`
+
+    this.http.delete<number>(url, options).subscribe()
+    this.getTodos()
   }
 
 
-  public addTodo(content: string): void {
-    this.todos.push({
-      id: this.lastId,
-      content: content,
-      completed: false
-    })
+  public addTodo(todo: Todo): void {
+    const url = `${env.url}/todo`;
 
-    this.lastId++;
+    this.http.post<Todo[]>(url, todo, options).subscribe(
+      todos => this.todos$$.next(todos)
+    )
   }
 
-  public getTodos(): Todo[] {
-    return this.todos;
+  public getTodos(): void {
+    const url = `${env.url}/todos`;
+
+    this.http.get<Todo[]>(url, options).subscribe(
+      todos => this.todos$$.next(todos)
+    );
   }
+
+
 
 
 }
