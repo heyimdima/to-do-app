@@ -30,9 +30,8 @@ export class TodosService {
   public toggleDone(id: number):void {
     const url = `${env.url}/todo/${id}`
 
-    this.http.put<number>(url, id, options).subscribe();
-    this.getTodos();
-
+    this.http.put<number>(url, id, options).subscribe(
+      _ => this.getTodos());
 
   }
 
@@ -40,8 +39,9 @@ export class TodosService {
     // this.todos = this.todos.filter((todo) => todo.id !== id);
     const url = `${env.url}/todo/${id}`
 
-    this.http.delete<number>(url, options).subscribe()
-    this.getTodos()
+    this.http.delete<number>(url, options).subscribe(
+      _ => this.getTodos()
+    );
   }
 
 
