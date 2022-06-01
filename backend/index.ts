@@ -77,11 +77,17 @@ async function updateTodo(request: Request, response: Response, next: NextFuncti
   const todoIndex = todos.findIndex(todo => todo.id == todoID)
   const todo = request.body as Todo
 
-  if (todoIndex > -1) {
-    todos[todoIndex] = todo
+  if (todoIndex > -1 && todos[todoIndex].completed == true) {
+    todos[todoIndex].completed = false;
 
     response.status(200).send()
-  } else {
+  } 
+  else if(todoIndex > -1 && todos[todoIndex].completed == false) {
+    todos[todoIndex].completed = true
+    
+    response.status(200).send()
+  }
+  else {
     response.status(404).send()
   }
 }

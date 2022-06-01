@@ -21,21 +21,19 @@ export class TodosService {
   private todos$$: BehaviorSubject<Todo[]> = new BehaviorSubject<Todo[]>([])
   public todos$: Observable<Todo[]> = this.todos$$.asObservable();
 
-  public lastId: number = 0;
-
-
   constructor(public http: HttpClient) { }
 
   // 
-  public toggleDone(id: number):void {
+  public toggleDone(id: number): void {
     const url = `${env.url}/todo/${id}`
 
-    this.http.put<number>(url, id, options).subscribe(
-      _ => this.getTodos());
+    this.http.put<number>(url, options).subscribe(
+      _ => this.getTodos()
+    );
 
   }
 
-  public deleteTodo(id: number) : void {
+  public deleteTodo(id: number): void {
     // this.todos = this.todos.filter((todo) => todo.id !== id);
     const url = `${env.url}/todo/${id}`
 
@@ -50,7 +48,7 @@ export class TodosService {
 
     this.http.post<Todo[]>(url, todo, options).subscribe(
       todos => this.todos$$.next(todos)
-    )
+    );
   }
 
   public getTodos(): void {
