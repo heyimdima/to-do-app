@@ -1,48 +1,44 @@
-    <section class="To-Do List">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col">
-                    <div class="card" style="border-radius: .75rem;">
-                        <div class="card-body py-4 px-4 px-md-5">
+<section class="To-Do List">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card" style="border-radius: .75rem; background-color: bisque;">
+                    <div class="card-body py-4 px-4 px-md-5">
 
-                            <p class="h1 text-center mt-3 mb-4 pb-3">To-Do List</p>
+                        <p class="h1 text-center mt-3 mb-4 pb-3">To-Do List</p>
 
-                            <div class="pb-2">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
-                                                <input 
-                                                type="text"
-                                                placeholder="Enter todo..."
-                                                class="form-control form-control-lg"
-                                                ngModel #todoTextField="ngModel" required name="text"
-                                                />
-                                                <button type="submit" class="btn btn-primary">Add Todo</button>
-                                                <p *ngIf="todoTextField.invalid">Please enter the text of your todo</p>
-                                            </form>
-                                        </div>
+                        <div class="pb-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex flex-row justify-content-center">
+                                        
+                                        <form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
+                                            <input type="text" placeholder="Enter todo..." class="form-control form-control-lg" ngModel
+                                                #todoTextField="ngModel" required name="text" />
+                                        </form>
+            
+                                        <button type="submit" class="btn btn-primary">Add Todo</button>
+
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-
-                            <div *ngFor="let todo of todos$ | async" class="todo" [ngClass]="{ 'done': todo.completed }">
-                                <ul class="list-group list-group-horizontal rounded-0 bg-transparent">
-                                    <li class="list-group-item px-3 py-1 d-flex alight-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
-                                        <div class="border bg-light">{{ todo.id }}</div>
-                                    </li>
-                                    <li class="list-group-item px-3 py-1 d-flex alight-items-center flex-grow-1 border-0 bg-transparent">
-                                        <div class="content border bg-light" (click)="toggleDone(todo.id)" >{{ todo.content }}</div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <button type="button" class="btn btn-primary btn-sm" (click)="deleteTodo(todo.id)">Remove</button>
-                                    </li>
-                                </ul>
+                    <div *ngFor="let todo of todos$ | async" class="todo" [ngClass]="{ 'done': todo.completed }">
+                        <div class="row">
+                            <div class="col-10" (click)="toggleDone(todo.id)">
+                                {{ todo.content }}
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary btn-sm" 
+                                (click)="deleteTodo(todo.id)">Remove</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-    </section>
+        </div>
+    </div>
+</section>

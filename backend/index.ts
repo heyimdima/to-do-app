@@ -2,7 +2,6 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
 import { Todo } from './todo';
-import crypto from 'crypto'
 
 const app = express();
 const router = express.Router();
