@@ -67,7 +67,7 @@ async function getTodo(request: Request, response: Response, next: NextFunction)
 
 async function getTodos(request: Request, response: Response, next: NextFunction) {
 
-  pool.query('SELECT * FROM todos ORDER BY id desc;', []).then(
+  pool.query('SELECT * FROM todos ORDER BY id DESC;', []).then(
 
     query => response.status(200).json(query.rows)
 
