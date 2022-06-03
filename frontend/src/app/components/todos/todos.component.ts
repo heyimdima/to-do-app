@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { Todo } from 'src/app/models/todo';
 import { TodosService } from 'src/app/services/todos.service';
 
