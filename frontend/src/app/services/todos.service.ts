@@ -24,10 +24,10 @@ export class TodosService {
   constructor(public http: HttpClient) { }
 
   // 
-  public toggleDone(id: number): void {
-    const url = `${env.url}/todo/${id}`
+  public toggleDone(todo: Todo): void {
+    const url = `${env.url}/todo/${todo.id}`
 
-    this.http.put<number>(url, options).subscribe(
+    this.http.put<number>(url, todo, options).subscribe(
       _ => this.getTodos()
     );
 
@@ -47,7 +47,7 @@ export class TodosService {
     const url = `${env.url}/todo`;
 
     this.http.post<Todo[]>(url, todo, options).subscribe(
-      todos => this.todos$$.next(todos)
+      _ => this.getTodos()
     );
   }
 
@@ -58,8 +58,4 @@ export class TodosService {
       todos => this.todos$$.next(todos)
     );
   }
-
-
-
-
 }

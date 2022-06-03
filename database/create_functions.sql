@@ -1,13 +1,36 @@
--- CRUD OPERATIONS WITH SQL
+-- Function to create a todo, takes in 3 parameters and return an array containing the created todo
 
--- CREATE
-INSERT INTO todos (id, content, completed) VALUES (656754, 'Test of the database todo 2', FALSE);
+CREATE OR REPLACE FUNCTION create_todo(
 
--- READ
-SELECT * FROM todos; -- Display all of the todos
+    content todos.content%type,
 
--- UPDATE
-UPDATE todos SET completed = TRUE WHERE id='656754'; -- Update the todo with specific identifier
+    completed todos.completed%type
 
--- DELETE
-DELETE FROM todos WHERE id='656754'; --Delete a todo with specific identifier
+) RETURNS SETOF todos as $$
+
+
+DECLARE
+
+todo_id todos.id%type;
+
+
+BEGIN
+
+INSERT INTO todos (content, completed)
+
+VALUES (content, completed)
+
+RETURNING id INTO todo_id;
+
+RETURN QUERY
+
+SELECT *
+
+FROM todos
+
+WHERE todos.id = todo_id;
+
+END;
+
+
+$$ LANGUAGE 'plpgsql';

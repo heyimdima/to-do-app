@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tables": "psql -U postgres -d exampledb -f create_tables.sql",
-    "data": "psql -U postgres -d exampledb -f create_functions.sql"
+    "functions": "psql -U postgres -d exampledb -f create_functions.sql"
   },
   "author": "",
   "license": "ISC"

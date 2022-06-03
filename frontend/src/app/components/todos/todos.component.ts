@@ -30,8 +30,8 @@ export class TodosComponent implements OnInit {
   }
 
   //  
-  toggleDone(id: number):void {
-    this.todosService.toggleDone(id);
+  toggleDone(todo: Todo):void {
+    this.todosService.toggleDone(todo);
    }
 
   deleteTodo(id: number): void {

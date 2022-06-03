@@ -2,6 +2,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
 import { Todo } from './todo';
+import { pool } from './query-config';
 
 const app = express();
 const router = express.Router();
@@ -13,16 +14,12 @@ app.use(bodyParser.json())
 app.use(router)
 
 app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
-  })
-
-router.get('/', (request: Request, response: Response) => {
-    response.json({ info: 'To-Do App Backend' })
+  console.log(`App running on port ${port}.`)
 })
 
-const todos: Todo[] = [
-  {id: 1, content: 'test', completed: false}
-]
+router.get('/', (request: Request, response: Response) => {
+  response.json({ info: 'To-Do App Backend' })
+})
 
 
 router.post('/todo', createTodo)
@@ -33,60 +30,70 @@ router.put('/todo/:todoID', updateTodo)
 
 async function createTodo(request: Request, response: Response, next: NextFunction) {
   const todo = request.body as Todo
-  const randomID = Math.floor(Math.random() * 100000000);
+  // const randomID = Math.floor(Math.random() * 100000000);
 
-  todo.id = randomID
+  // todo.id = randomID
   todo.completed = false;
 
-  todos.push(todo)
+  pool.query('SELECT create_todo($1, $2)', [todo.content, todo.completed]).then(
+    
+    query => response.status(200).json(query.rows)
 
-  response.status(201).json(todos)
+  )
 }
 
 async function deleteTodo(request: Request, response: Response, next: NextFunction) {
+
   const todoID = parseInt(request.params.todoID)
-  const todoIndex = todos.findIndex(todo => todo.id == todoID)
 
-  if (todoIndex > -1) {
-    todos.splice(todoIndex, 1)
+  pool.query('DELETE FROM todos WHERE id = $1', [todoID]).then(
 
-    response.status(200).send()
-  } else {
-    response.status(404).send()
-  }
+    query => response.status(200).json(query.rows)
+
+  )
+
 }
 
 async function getTodo(request: Request, response: Response, next: NextFunction) {
   const todoID = parseInt(request.params.todoID)
-  const todo: Todo = todos.find(todo => todo.id == todoID)
 
-  if (todo) {
-    response.status(200).json(todo)
-  } else {
-    response.status(404).send()
-  }
+  pool.query('SELECT * FROM todos WHERE id = $1;', [todoID]).then(
+
+    query => response.status(200).json(query.rows[0])
+
+  )
+
 }
 
 async function getTodos(request: Request, response: Response, next: NextFunction) {
-  response.status(200).json(todos)
+
+  pool.query('SELECT * FROM todos ORDER BY id desc;', []).then(
+
+    query => response.status(200).json(query.rows)
+
+  )
+
 }
 
 async function updateTodo(request: Request, response: Response, next: NextFunction) {
-  const todoID = parseInt(request.params.todoID)
-  const todoIndex = todos.findIndex(todo => todo.id == todoID)
   const todo = request.body as Todo
 
-  if (todoIndex > -1 && todos[todoIndex].completed == true) {
-    todos[todoIndex].completed = false;
+  if (todo.completed == false) {
 
-    response.status(200).send()
-  } 
-  else if(todoIndex > -1 && todos[todoIndex].completed == false) {
-    todos[todoIndex].completed = true
-    
-    response.status(200).send()
+    pool.query('UPDATE todos SET completed = TRUE WHERE id=$1;', [todo.id]).then(
+
+      query => response.status(200).json(query.rows)
+
+    )
+
+  } else {
+
+    pool.query('UPDATE todos SET completed = FALSE WHERE id=$1;', [todo.id]).then(
+
+      query => response.status(200).json(query.rows)
+
+    )
+
   }
-  else {
-    response.status(404).send()
-  }
+
 }

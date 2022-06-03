@@ -11,17 +11,15 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex flex-row justify-content-center">
-
+                                        
                                         <form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
-                                            <input type="text" placeholder="Enter todo..."
-                                                class="form-control form-control-lg" ngModel #todoTextField="ngModel"
-                                                required name="text" />
+                                            <input type="text" placeholder="Enter todo..." class="form-control form-control-lg" ngModel
+                                                #todoTextField="ngModel" required name="text" />
                                         </form>
-                                        <button type="submit" (click)="onFormSubmit(form)"
-                                            class="btn btn-primary">Add</button>
+                                        <button type="submit" (click)="onFormSubmit(form)" class="btn btn-primary">Add</button>
 
                                     </div>
-
+                                    
                                 </div>
                             </div>
                         </div>
@@ -30,17 +28,17 @@
                     <div *ngFor="let todo of todos$ | async" class="todo" [ngClass]="{ 'done': todo.completed }">
                         <div class="container overflow-hidden py-2 px-5 bg-light">
                             <div class="row g-5">
-                                <div class="col-11" (click)="toggleDone(todo.id)">
-                                    <h5>
-                                        {{ todo.content }}
-                                    </h5>
-                                </div>
-                                <div class="col-1">
+                              <div class="col-11" (click)="toggleDone(todo)">
+                                   <h5>
+                                       {{ todo.content }}
+                                   </h5>
+                              </div>
+                              <div class="col-1">
                                     <button type="button" class="btn btn-primary"
-                                        (click)="deleteTodo(todo.id)">X</button>
-                                </div>
+                                     (click)="deleteTodo(todo.id)">X</button>
+                              </div>
                             </div>
-                        </div>
+                          </div>
                     </div>
                 </div>
             </div>

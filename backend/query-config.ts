@@ -1,8 +1,13 @@
 import Pool from "pg";
 
 export const pool = new Pool.Pool({
-    user: "example",
+    user: "postgres",
+
     host: "localhost",
+
     database: "exampledb",
-    password: "password"
+
+    password: "31102000",
+
+    port: 5432
 })
